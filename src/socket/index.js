@@ -1,16 +1,13 @@
 let onlineUsers = [];
 
 export const newConnectionHandler = (socket) => {
-  console.log("A new client connected! it's id is:", socket.id);
-  socket.emit("welcome", { message: `HELLO ${socket.id}` });
+  console.log("A new client connected! The socket id is:", socket.id);
+  socket.emit("welcome", { message: `HELLO IN TO THE WORLD ${socket.id}` });
 
   socket.on("setUsername", (payload) => {
     console.log(payload);
-
     onlineUsers.push({ username: payload.username, socketId: socket.id });
-
     socket.emit("loggedIn", onlineUsers);
-
     socket.broadcast.emit("updateOnlineUsersList", onlineUsers);
   });
 
@@ -20,7 +17,6 @@ export const newConnectionHandler = (socket) => {
 
   socket.on("disconnect", () => {
     onlineUsers = onlineUsers.filter((user) => user.socketId !== socket.id);
-
     socket.broadcast.emit("updateOnlineUsersList", onlineUsers);
   });
 };
